@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社長の時間ロス診断 | 小さな会社のAI係</title>
+<meta name="description" content="ひとり社長・個人事業主・小規模法人向け。5分の診断で、AIで減らせる仕事・外注すべき仕事・今は触らなくていい仕事がわかります。">
+
+<!-- OGP / SNSシェア用 -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小さな会社のAI係">
+<meta property="og:title" content="社長の時間ロス診断 — 12問で、社長の時間を奪っている仕事がわかる">
+<meta property="og:description" content="請求・集客・SNS・問い合わせ・AI・外注の6軸で診断。AIで減らせる仕事と外注すべき仕事が具体的にわかります。無料・登録不要・約5分。">
+<meta property="og:url" content="https://shacho-shindan.pages.dev">
+<meta property="og:image" content="https://shacho-shindan.pages.dev/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+
+<!-- X (Twitter) Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@小さな会社のAI係">
+<meta name="twitter:title" content="社長の時間ロス診断 — 12問で、社長の時間を奪っている仕事がわかる">
+<meta name="twitter:description" content="請求・集客・SNS・問い合わせ・AI・外注の6軸で診断。AIで減らせる仕事と外注すべき仕事が具体的にわかります。無料・登録不要・約5分。">
+<meta name="twitter:image" content="https://shacho-shindan.pages.dev/ogp.png">
+
+<!-- GA4 placeholder -->
+<!--
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+-->
+<style>
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','YuGothic','Yu Gothic','Meiryo',sans-serif;
+  background:#f5f1ea;color:#1a1a1a;
+  -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:'Hiragino Mincho ProN','YuMincho','Yu Mincho','MS PMincho',serif;}
+a{color:inherit;text-decoration:none;}
+.section{display:none;}
+.section.active{display:block;}
+
+/* ============================================================
+   共通コンポーネント
+   ============================================================ */
+/* カード */
+.card{
+  background:#fff;
+  border:1px solid #e8e4da;
+  border-radius:10px;
+  padding:22px;
+  margin-bottom:12px;
+  box-shadow:0 1px 6px rgba(0,0,0,.05);
+}
+/* セクションラベル */
+.sec-label{
+  font-size:10px;color:#aaa;
+  margin-bottom:16px;
+  letter-spacing:.14em;text-transform:uppercase;
+}
+/* グリッド */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;}
+/* バッジ */
+.badge-ai{font-size:10px;color:#2d6a4f;background:#e4f3eb;padding:3px 9px;border-radius:4px;white-space:nowrap;flex-shrink:0;font-weight:500;letter-spacing:.02em;}
+.badge-out{font-size:10px;color:#7a5020;background:#f5ebe0;padding:3px 9px;border-radius:4px;white-space:nowrap;flex-shrink:0;font-weight:500;}
+/* タグピル */
+.tag-pill{font-size:11px;color:#2d6a4f;background:#e4f3eb;border:1px solid #b8d8c4;padding:5px 14px;border-radius:20px;display:inline-block;margin:3px;}
+
+/* ============================================================
+   LANDING ボタン
+   ============================================================ */
+.lp-btn{
+  display:inline-block;background:#2d6a4f;color:#fff;
+  border:none;border-radius:6px;padding:15px 48px;
+  font-size:15px;cursor:pointer;font-family:inherit;
+  letter-spacing:.06em;transition:background .2s,transform .1s;
+}
+.lp-btn:hover{background:#245a42;transform:translateY(-1px);}
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+#sec-quiz{background:#f8f6f0;min-height:100vh;}
+
+/* 選択肢 */
+.opt-card{
+  display:block;width:100%;
+  background:#fff;
+  border:1.5px solid #e4e0d6;
+  border-radius:8px;
+  padding:18px 20px 18px 22px;
+  text-align:left;font-size:14px;line-height:1.85;
+  color:#333;cursor:pointer;font-family:inherit;
+  transition:border-color .15s,background .12s,transform .1s,box-shadow .15s;
+  margin-bottom:10px;
+  position:relative;
+  word-break:keep-all;overflow-wrap:break-word;
+}
+.opt-card::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;
+  width:3px;border-radius:8px 0 0 8px;
+  background:transparent;transition:background .15s;
+}
+.opt-card:hover{
+  border-color:#2d6a4f60;background:#fafdf9;
+  transform:translateX(2px);
+  box-shadow:0 2px 8px rgba(45,106,79,.08);
+}
+.opt-card.selected{
+  background:#eef8f2;
+  border:2px solid #2d6a4f;
+  color:#1a3a28;
+  box-shadow:0 2px 10px rgba(45,106,79,.12);
+}
+.opt-card.selected::before{background:#2d6a4f;}
+
+/* 次へボタン */
+.btn-next{
+  display:block;width:100%;
+  background:#2d6a4f;color:#fff;
+  border:none;border-radius:8px;
+  padding:16px;font-size:15px;
+  cursor:pointer;font-family:inherit;
+  letter-spacing:.06em;
+  transition:background .2s,opacity .2s;
+}
+.btn-next:disabled{background:#d4d0c8;color:#aaa;cursor:default;}
+.btn-next:not(:disabled):hover{background:#245a42;}
+
+/* クイズ アニメーション */
+@keyframes qLeave{to{opacity:0;transform:translateY(-10px);}}
+@keyframes qEnter{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ============================================================
+   RESULT
+   ============================================================ */
+#sec-result{background:#f5f1ea;}
+
+/* スコアタイルグリッド */
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.score-tile{
+  background:#fff;
+  border:1px solid #e8e4da;
+  border-radius:10px;
+  padding:16px 14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+  animation:tileIn .5s ease both;
+  position:relative;
+  overflow:hidden;
+}
+.score-tile::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;
+  width:4px;
+}
+@keyframes tileIn{
+  from{opacity:0;transform:translateY(10px) scale(.97);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+.tile-pct{
+  font-size:34px;font-weight:500;line-height:1;
+  margin-bottom:5px;
+  font-family:'Hiragino Mincho ProN','YuMincho','Yu Mincho','MS PMincho',serif;
+}
+.tile-label{font-size:10px;color:#aaa;margin-bottom:10px;letter-spacing:.04em;}
+.tile-bar-wrap{height:3px;background:#f0ece4;border-radius:2px;overflow:hidden;}
+.tile-bar{height:3px;border-radius:2px;width:0%;}
+
+/* アフィリリンク */
+.aff-link{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;margin-bottom:8px;
+  background:#fafaf6;border:1px solid #e8e4da;border-radius:8px;
+  font-size:13px;color:#2d6a4f;
+  transition:background .15s,transform .1s;
+}
+.aff-link:hover{background:#eef8f2;transform:translateX(2px);}
+.aff-link::after{content:"→";color:#aaa;font-size:12px;}
+
+/* メールフォーム */
+.email-input{
+  width:100%;border:1.5px solid #e4e0d6;border-radius:6px;
+  padding:12px 14px;font-size:13px;font-family:inherit;
+  outline:none;background:#fff;color:#1a1a1a;
+  transition:border-color .15s,box-shadow .15s;
+}
+.email-input:focus{border-color:#2d6a4f;box-shadow:0 0 0 3px rgba(45,106,79,.08);}
+
+/* ============================================================
+   LANDING — ビジネス向けLP
+   ============================================================ */
+/* スティッキーナビ */
+.lp-nav{
+  position:sticky;top:0;z-index:40;
+  background:#fff;
+  border-bottom:2px solid #2d6a4f;
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.lp-nav-brand{
+  display:flex;flex-direction:column;gap:2px;
+}
+.lp-nav-brand-main{font-size:12px;font-weight:600;color:#1a1a1a;letter-spacing:.06em;}
+.lp-nav-brand-sub{font-size:9px;color:#aaa;letter-spacing:.1em;}
+.lp-nav-cta{
+  background:#2d6a4f;color:#fff;
+  border:none;border-radius:4px;
+  padding:9px 18px;font-size:12px;
+  cursor:pointer;font-family:inherit;
+  letter-spacing:.06em;
+  transition:background .2s;
+}
+.lp-nav-cta:hover{background:#245a42;}
+
+/* ヒーローエリア */
+.lp-hero-wrap{
+  background:#fff;
+  border-bottom:1px solid #e8e4da;
+  padding:52px 24px 48px;
+}
+.lp-category-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:10px;color:#2d6a4f;letter-spacing:.14em;
+  background:#e4f3eb;border:1px solid #b8d8c4;
+  border-radius:3px;padding:5px 12px;margin-bottom:22px;
+}
+.lp-category-tag::before{
+  content:"";width:6px;height:6px;
+  background:#2d6a4f;border-radius:50%;
+}
+.lp-h1{
+  font-size:28px;font-weight:500;line-height:1.7;
+  color:#1a1a1a;margin-bottom:14px;
+}
+.lp-lead{
+  font-size:13px;color:#888;line-height:1.9;
+  margin-bottom:32px;
+}
+
+/* 症状チェックボックスリスト */
+.symptom-box{
+  background:#f8f6f0;
+  border:1px solid #e8e4da;
+  border-radius:8px;
+  overflow:hidden;
+  margin-bottom:32px;
+}
+.symptom-box-header{
+  padding:11px 18px;
+  border-bottom:1px solid #e8e4da;
+  background:#fff;
+  display:flex;align-items:center;gap:8px;
+}
+.symptom-box-header-dot{
+  width:7px;height:7px;background:#c85c3a;border-radius:50%;
+}
+.symptom-box-header-text{font-size:10px;color:#666;letter-spacing:.1em;font-weight:600;}
+.symptom-row{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:13px 18px;
+  border-bottom:1px solid #e8e4da;
+  background:#fff;
+}
+.symptom-row:last-child{border-bottom:none;}
+.symptom-row-icon{
+  width:18px;height:18px;min-width:18px;
+  background:#fdf4f0;border:1.5px solid #e0a090;
+  border-radius:4px;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+}
+.symptom-row-text{font-size:13px;color:#444;line-height:1.65;}
+
+/* CTA ブロック */
+.lp-cta-block{text-align:center;margin-bottom:0;}
+.lp-cta-meta{
+  display:flex;justify-content:center;gap:20px;
+  margin-top:12px;flex-wrap:wrap;
+}
+.lp-cta-meta span{font-size:11px;color:#bbb;}
+.lp-cta-meta a,
+.lp-cta-meta button{
+  font-size:11px;color:#2d6a4f;
+  background:none;border:none;cursor:pointer;
+  font-family:inherit;text-decoration:underline;padding:0;
+}
+
+/* 診断でわかること */
+.lp-section-label{
+  font-size:10px;color:#aaa;letter-spacing:.18em;
+  text-transform:uppercase;margin-bottom:22px;
+  display:flex;align-items:center;gap:10px;
+}
+.lp-section-label::after{
+  content:"";flex:1;height:1px;background:#e8e4da;
+}
+
+/* 6軸グリッド */
+.axis-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  margin-bottom:40px;
+}
+.axis-tile{
+  background:#fff;
+  border:1px solid #e8e4da;
+  border-radius:8px;
+  padding:16px 16px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.axis-tile-num{
+  font-size:10px;color:#bbb;
+  font-family:'Hiragino Mincho ProN',serif;
+  flex-shrink:0;width:16px;
+}
+.axis-tile-label{font-size:13px;color:#333;font-weight:500;}
+.axis-tile-desc{font-size:10px;color:#aaa;margin-top:2px;}
+
+/* 7タイプバッジ行 */
+.type-badge-wrap{
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-bottom:32px;
+}
+.type-badge{
+  font-size:11px;padding:5px 14px;
+  border-radius:20px;font-weight:500;
+  border:1px solid;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LANDING
+     ============================================================ -->
+<div id="sec-landing" class="section active">
+
+  <!-- スティッキーナビ -->
+  <nav class="lp-nav">
+    <div class="lp-nav-brand">
+      <div class="lp-nav-brand-main">社長の時間ロス診断</div>
+      <div class="lp-nav-brand-sub">小さな会社のAI係</div>
+    </div>
+    <button class="lp-nav-cta" onclick="startQuiz()">無料で診断する →</button>
+  </nav>
+
+  <!-- ヒーロー -->
+  <div class="lp-hero-wrap">
+    <div style="max-width:640px;margin:0 auto;">
+
+      <!-- カテゴリタグ -->
+      <div class="lp-category-tag">ひとり社長・小規模法人向け　5分の業務診断</div>
+
+      <!-- メインヘッドライン -->
+      <h1 class="serif lp-h1">
+        社長が全部やっている会社の<br>
+        どこが時間を奪っているか、<br>
+        12問でわかります。
+      </h1>
+      <p class="lp-lead">
+        請求・集客・SNS・問い合わせ・AI・外注の6軸で診断。<br>
+        今すぐ手をつけるべき仕事と、まだ触らなくていい仕事が<br>明確になります。
+      </p>
+
+      <!-- 症状チェックリスト -->
+      <div class="symptom-box">
+        <div class="symptom-box-header">
+          <div class="symptom-box-header-dot"></div>
+          <div class="symptom-box-header-text">こういった状況の方へ</div>
+        </div>
+        <div id="symptom-list"></div>
+      </div>
+
+      <!-- CTA -->
+      <div class="lp-cta-block">
+        <button class="lp-btn" onclick="startQuiz()" style="width:100%;max-width:380px;padding:17px 40px;font-size:15px;border-radius:6px;letter-spacing:.08em;">
+          無料で診断する →
+        </button>
+        <div class="lp-cta-meta">
+          <span>所要時間：約5分</span>
+          <span>登録・ログイン不要</span>
+          <button onclick="showDemo()">サンプル結果を見る →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 診断でわかること -->
+  <div style="background:#f5f1ea;padding:44px 24px;">
+    <div style="max-width:640px;margin:0 auto;">
+
+      <div class="lp-section-label">診断でわかること</div>
+
+      <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:40px;">
+        <div style="background:#fff;border:1px solid #e8e4da;border-radius:8px;padding:20px 20px;display:flex;align-items:flex-start;gap:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);">
+          <div class="serif" style="font-size:22px;color:#2d6a4f;font-weight:500;flex-shrink:0;width:28px;">01</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;">6軸スコアで弱点と強みが一覧でわかる</div>
+            <div style="font-size:12px;color:#999;line-height:1.75;">請求・集客・SNS・問い合わせ・AI・外注の6軸でスコア化。レーダーチャートで全体の状態が一目でわかります。</div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e4da;border-radius:8px;padding:20px 20px;display:flex;align-items:flex-start;gap:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);">
+          <div class="serif" style="font-size:22px;color:#2d6a4f;font-weight:500;flex-shrink:0;width:28px;">02</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;">AIで減らせる仕事・外注すべき仕事が具体的にわかる</div>
+            <div style="font-size:12px;color:#999;line-height:1.75;">「今すぐAIに任せられる仕事」と「お金を払って外注すべき仕事」を分けて提示します。</div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e4da;border-radius:8px;padding:20px 20px;display:flex;align-items:flex-start;gap:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);">
+          <div class="serif" style="font-size:22px;color:#2d6a4f;font-weight:500;flex-shrink:0;width:28px;">03</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;">7タイプ診断で処方箋が出る</div>
+            <div style="font-size:12px;color:#999;line-height:1.75;">あなたの会社の状態に合った「最初にやるべき3つのアクション」が受け取れます。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7タイプバッジ -->
+      <div class="lp-section-label">診断タイプ</div>
+      <div class="type-badge-wrap" id="type-badges"></div>
+
+      <!-- 6軸グリッド -->
+      <div class="lp-section-label" style="margin-top:32px;">診断する6つの軸</div>
+      <div class="axis-grid" id="axes-grid"></div>
+
+      <!-- ボトムCTA -->
+      <div style="background:#fff;border:1px solid #e8e4da;border-radius:10px;padding:28px 24px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05);">
+        <div style="font-size:13px;color:#555;margin-bottom:20px;line-height:1.85;">
+          社長が全部やる会社から、<br>仕組みで回る会社へ。
+        </div>
+        <button class="lp-btn" onclick="startQuiz()" style="padding:16px 48px;font-size:15px;">無料で診断する →</button>
+        <div style="margin-top:10px;font-size:10px;color:#ccc;">診断結果にはPRを含む場合があります</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- hidden: legacy target-list (initLandingに必要) -->
+  <div id="target-list" style="display:none;"></div>
+</div>
+
+<!-- ============================================================
+     QUIZ
+     ============================================================ -->
+<div id="sec-quiz" class="section">
+
+  <!-- 固定ヘッダー：プログレス + カウンター -->
+  <div style="position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid #ece8e0;padding:16px 24px 0;">
+    <div style="max-width:640px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-size:11px;color:#999;letter-spacing:.08em;">
+          <span id="q-num" style="font-size:14px;font-weight:600;color:#1a1a1a;font-family:'Hiragino Mincho ProN',serif;"></span>
+          <span id="q-total" style="color:#bbb;"></span>
+        </span>
+        <span id="q-pct-label" style="font-size:11px;color:#2d6a4f;font-weight:500;"></span>
+      </div>
+      <!-- ステッパー風ドット -->
+      <div id="q-dots" style="display:flex;gap:4px;margin-bottom:14px;"></div>
+      <!-- バー -->
+      <div style="height:2px;background:#f0ece4;border-radius:1px;overflow:hidden;">
+        <div id="progress-bar" style="height:2px;background:#2d6a4f;width:0%;transition:width .4s ease;border-radius:1px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 問題コンテンツ（アニメ対象） -->
+  <div id="q-content" style="max-width:640px;margin:0 auto;padding:48px 24px 130px;">
+    <div id="q-axis-tag" style="display:inline-block;font-size:10px;color:#aaa;border:1px solid #e8e4da;border-radius:4px;padding:3px 10px;margin-bottom:20px;letter-spacing:.08em;"></div>
+    <h2 id="q-text" class="serif" style="font-size:22px;font-weight:500;line-height:1.85;margin-bottom:32px;color:#1a1a1a;"></h2>
+    <div id="q-options"></div>
+  </div>
+
+  <!-- 固定フッター：次へボタン -->
+  <div style="position:fixed;bottom:0;left:0;right:0;padding:12px 24px 28px;background:linear-gradient(to top,#f8f6f0 60%,rgba(248,246,240,0));z-index:20;">
+    <div style="max-width:640px;margin:0 auto;">
+      <button id="btn-next" class="btn-next" onclick="nextQuestion()" disabled></button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     RESULT
+     ============================================================ -->
+<div id="sec-result" class="section">
+  <div style="max-width:640px;margin:0 auto;padding:32px 20px 72px;">
+
+    <!-- ============ ヒーローカード ============ -->
+    <div id="result-hero" style="border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+
+      <!-- カラーバー（タイプ別） -->
+      <div id="hero-bar" style="height:6px;"></div>
+
+      <!-- 本文 -->
+      <div style="background:#fff;padding:28px 24px 24px;">
+
+        <!-- ブランド＋診断結果ラベル -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div style="font-size:9px;color:#ccc;letter-spacing:.16em;text-transform:uppercase;">社長の時間ロス診断</div>
+          <div id="hero-badge" style="font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:.04em;font-weight:500;"></div>
+        </div>
+
+        <!-- タイプ名 -->
+        <div style="font-size:12px;color:#aaa;margin-bottom:8px;">あなたは</div>
+        <h1 id="r-name" class="serif" style="font-size:36px;font-weight:500;line-height:1.2;margin-bottom:6px;letter-spacing:-.02em;"></h1>
+        <div style="width:32px;height:2px;margin:10px 0 12px;" id="hero-rule"></div>
+        <div id="r-subtitle" style="font-size:13px;color:#888;line-height:1.75;margin-bottom:24px;"></div>
+
+        <!-- レーダーチャート -->
+        <div id="radar-container" style="display:flex;justify-content:center;margin-bottom:20px;"></div>
+
+        <!-- スタット行 -->
+        <div style="display:flex;gap:8px;">
+          <div id="stat-total" style="flex:1;border-radius:8px;padding:14px;border:1px solid #e8e4da;text-align:center;">
+            <div style="font-size:9px;color:#bbb;margin-bottom:4px;letter-spacing:.1em;text-transform:uppercase;">総合スコア</div>
+            <div style="display:flex;align-items:baseline;justify-content:center;gap:2px;">
+              <span id="r-avg-hero" class="serif" style="font-size:34px;font-weight:500;color:#1a1a1a;">0</span>
+              <span style="font-size:14px;color:#bbb;">%</span>
+            </div>
+          </div>
+          <div id="stat-worst" style="flex:2;border-radius:8px;padding:14px;border:1px solid #e8e4da;">
+            <div style="font-size:9px;color:#bbb;margin-bottom:6px;letter-spacing:.1em;text-transform:uppercase;">最も低いスコア</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span id="r-worst-label" style="font-size:12px;color:#555;"></span>
+              <span id="r-worst-pct" class="serif" style="font-size:28px;font-weight:500;"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ブランドフッター -->
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid #f0ece4;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;color:#ccc;letter-spacing:.06em;">小さな会社のAI係</span>
+          <span style="font-size:10px;color:#ccc;">#小さな会社のAI係</span>
+        </div>
+      </div>
+    </div>
+    <!-- ============ ヒーローカードここまで ============ -->
+
+    <!-- 一言診断 -->
+    <div class="card">
+      <p id="r-desc" style="font-size:13px;line-height:2.1;color:#555;"></p>
+    </div>
+
+    <!-- このままだとこうなります -->
+    <div id="r-risk-section" style="background:#fdf4f0;border:1px solid #e8b8a0;border-radius:10px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 6px rgba(200,92,58,.08);">
+      <div style="background:#c85c3a;padding:10px 20px;display:flex;align-items:center;gap:8px;">
+        <div style="width:7px;height:7px;background:#fff;border-radius:50%;"></div>
+        <span style="font-size:10px;color:#fff;font-weight:600;letter-spacing:.12em;">このままだとこうなります</span>
+      </div>
+      <div style="padding:20px;">
+        <div id="r-risk-title" style="font-size:14px;font-weight:600;color:#3a1a10;margin-bottom:10px;line-height:1.6;"></div>
+        <div id="r-risk-body" style="font-size:12px;color:#664030;line-height:2;"></div>
+      </div>
+    </div>
+
+    <!-- 6軸スコアタイル -->
+    <div style="margin-bottom:4px;padding:0 2px;">
+      <div class="sec-label">6軸スコア</div>
+    </div>
+    <div id="score-tiles" class="score-grid"></div>
+
+    <!-- できていること / 課題 -->
+    <div class="grid-2">
+      <div style="background:#f0faf4;border:1px solid #b8d8c4;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(45,106,79,.06);">
+        <div style="font-size:11px;color:#2d6a4f;font-weight:600;margin-bottom:12px;letter-spacing:.04em;">できていること</div>
+        <div id="r-has"></div>
+      </div>
+      <div style="background:#fdf4f0;border:1px solid #e8c0b0;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(200,92,58,.06);">
+        <div style="font-size:11px;color:#c85c3a;font-weight:600;margin-bottom:12px;letter-spacing:.04em;">課題になっていること</div>
+        <div id="r-missing"></div>
+      </div>
+    </div>
+
+    <!-- AI / 外注 -->
+    <div class="card">
+      <div class="sec-label">AIで減らせる仕事</div>
+      <div id="r-ai"></div>
+      <div style="border-top:1px solid #f0ece4;margin-top:14px;padding-top:14px;">
+        <div class="sec-label">外注したほうが早い仕事</div>
+        <div id="r-out"></div>
+      </div>
+    </div>
+
+    <!-- 最初にやるべき3つ -->
+    <div class="card">
+      <div class="sec-label">最初にやるべき3つ</div>
+      <div id="r-actions"></div>
+    </div>
+
+    <!-- カテゴリ＋アフィリ -->
+    <div class="card">
+      <div class="sec-label">おすすめカテゴリ</div>
+      <div id="r-cats" style="margin-bottom:16px;"></div>
+      <div id="r-affiliate"></div>
+      <div style="margin-top:12px;font-size:10px;color:#ccc;line-height:1.8;">
+        ※ 診断結果にはPRを含む場合があります。税務・法務・補助金申請の最終判断は専門家へご確認ください。
+      </div>
+    </div>
+
+    <!-- メールフォーム -->
+    <div class="card" style="background:#f8fdf8;border-color:rgba(45,106,79,.25);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:10px;color:#fff;background:#2d6a4f;padding:3px 9px;border-radius:4px;letter-spacing:.06em;font-weight:600;">無料</span>
+        <span style="font-size:14px;font-weight:600;color:#1a1a1a;">診断タイプ別チェックリストを受け取る</span>
+      </div>
+      <div id="r-checklist-desc" style="font-size:12px;color:#2d5a40;line-height:1.85;margin-bottom:16px;padding:12px 14px;background:#e8f8ee;border-radius:6px;border-left:3px solid #2d6a4f;"></div>
+      <div style="display:flex;gap:8px;">
+        <input type="email" id="email-input" class="email-input" placeholder="メールアドレスを入力" style="flex:1;min-width:0;">
+        <button onclick="submitEmail()" style="background:#2d6a4f;color:#fff;border:none;border-radius:6px;padding:12px 18px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:background .2s;letter-spacing:.04em;">無料で受け取る</button>
+      </div>
+      <div id="email-thanks" style="display:none;margin-top:12px;font-size:12px;color:#2d6a4f;font-weight:500;padding:10px;background:#e8f8ee;border-radius:6px;">ありがとうございます。まもなくメールをお送りします。</div>
+    </div>
+
+    <!-- Xシェア -->
+    <div style="background:#fff;border:1px solid #e8e4da;border-radius:10px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
+      <div style="background:#1a1a1a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:11px;color:#ccc;letter-spacing:.1em;">診断結果をXでシェアする</span>
+        <svg width="16" height="14" viewBox="0 0 1200 1227" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.163 519.284ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.828Z"/></svg>
+      </div>
+      <div style="padding:20px;">
+        <div id="r-share-preview" style="font-size:13px;color:#444;line-height:2;margin-bottom:8px;white-space:pre-line;padding:16px;background:#f8f6f0;border-radius:8px;border-left:3px solid #e8e4da;"></div>
+        <div style="font-size:11px;color:#aaa;margin-bottom:18px;padding-left:4px;">※ 投稿時に診断ページのURLが自動で付加されます</div>
+        <a id="r-share-link" href="#" target="_blank" rel="noopener noreferrer"
+          style="display:inline-block;background:#1a1a1a;color:#fff;border-radius:6px;padding:12px 32px;font-size:13px;font-weight:500;letter-spacing:.06em;transition:opacity .2s;">
+          Xに投稿する →
+        </a>
+      </div>
+    </div>
+
+    <!-- もう一度 -->
+    <div style="text-align:center;margin-top:8px;">
+      <button onclick="resetAll()" style="background:none;border:1px solid #ddd;border-radius:6px;padding:11px 28px;font-size:13px;color:#aaa;cursor:pointer;font-family:inherit;transition:border-color .15s,color .15s;">
+        もう一度診断する
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ====================================================
+// データ定義
+// ====================================================
+const TARGET_LIST=[
+  "請求・会計・問い合わせ対応を自分でやっている",
+  "HPもSNSも更新できていない気がする",
+  "AIを使ったほうがいい気はするが、何から始めるかわからない",
+  "人に頼みたいが、何を頼めばいいか整理できていない",
+  "毎日細かい作業に追われている",
+];
+
+const AXES=[
+  {key:"billing",  label:"請求・会計",    short:"請求"},
+  {key:"web",      label:"HP・MEO・集客", short:"HP・集客"},
+  {key:"sns",      label:"SNS・投稿",     short:"SNS"},
+  {key:"inquiry",  label:"問い合わせ対応",short:"問合せ"},
+  {key:"ai",       label:"AI・自動化",    short:"AI"},
+  {key:"outsource",label:"外注・分業",    short:"外注"},
+];
+
+const AXIS_SHORT={
+  billing:"請求・会計",web:"HP・集客",sns:"SNS・投稿",
+  inquiry:"問い合わせ対応",ai:"AI・自動化",outsource:"外注・分業"
+};
+
+// 軸タグ表示用
+const AXIS_TAG={
+  billing:"請求・会計",web:"HP・集客・MEO",sns:"SNS・投稿",
+  inquiry:"問い合わせ対応",ai:"AI・自動化",outsource:"外注・分業"
+};
+
+const JIGYOKU={
+  overloaded:   "今日も頼めずに、また自分でやった。",
+  marketing:    "HPを最後に更新した日を思い出せない。",
+  inquiry_loss: "返信しようと思ったまま、また明日になった。",
+  ai_lost:      "AIを試そうとして、タブだけ増えた。",
+  artisan:      "見積もりはまだ紙に書いている。",
+  almost_ready: "ツールだけ揃えて、まだつながっていない。",
+  outsource_bad:"指示を作る時間が惜しくて、また自分でやった。",
+};
+
+// このままだとこうなります（危機感メッセージ）
+const RISK={
+  overloaded:{
+    title:"社長が倒れたら、会社も止まります",
+    body:"今の状態は「社長＝会社」になっています。属人化が進むほど、休めない・任せられない・成長できないが同時に起きます。採用しても任せる仕組みがなければ、人件費が増えるだけです。",
+  },
+  marketing:{
+    title:"このままでは、競合だけがネット上で育ち続けます",
+    body:"良い仕事をしていても、ネット上の存在感がなければ新規客には届きません。HPやMEOを後回しにした1年は、競合が口コミと検索結果で先行した1年になります。",
+  },
+  inquiry_loss:{
+    title:"今月も、気づかないうちに売上が流れています",
+    body:"問い合わせへの返信が1日遅れると、検討中の客は別の会社に決めます。月5件の機会損失が年60件になり、単価次第では年間数百万円の損失になります。",
+  },
+  ai_lost:{
+    title:"周囲がAIで作業時間を半分にしている間、差が広がり続けます",
+    body:"AIを使っている競合は、投稿・メール・資料作成を従来の3倍の速度でこなしています。「試さない1ヶ月」は現状維持ではなく、相対的な後退です。",
+  },
+  artisan:{
+    title:"社長の記憶と経験だけで動く会社は、融資に通りません",
+    body:"数字の管理ができていない会社は、金融機関から「実態が見えない会社」と判断されます。また、受注が集中したとき・社長が動けないときに、会社全体が止まります。",
+  },
+  almost_ready:{
+    title:"ツールを揃えただけでは、時間は返ってきません",
+    body:"バラバラなシステムは「費用だけかかる複雑さ」になっています。連携させなければ、月額コストを払い続けながら、社長の確認作業も続きます。",
+  },
+  outsource_bad:{
+    title:"外注できない社長は、自分の時間を切り売りし続けます",
+    body:"今の仕事量が続く限り、売上の上限は社長の労働時間で決まります。外注できない理由の9割は「指示の仕組みがない」ことです。仕組みを作れば、時間は買えます。",
+  },
+};
+
+// タイプ別チェックリスト内容
+const CHECKLIST_DESC={
+  overloaded:   "「今週、外注できる仕事を1つ見つける」5ステップチェックリスト＋外注依頼テンプレ",
+  marketing:    "「HP・MEO・SNSを週1時間で回す」運用チェックリスト＋AI投稿文テンプレ3本",
+  inquiry_loss: "「問い合わせゼロ漏れ」返信テンプレ5種＋顧客フォローアップ設計チェックリスト",
+  ai_lost:      "「AI初日から使える」業務別プロンプト10選＋AI導入優先度チェックリスト",
+  artisan:      "「数字の見える化」請求・顧客管理スタートアップチェックリスト＋おすすめツール比較",
+  almost_ready: "「ツールをつなげる」自動化フロー設計チェックリスト＋GAS/Make導入ガイド",
+  outsource_bad:"「初めての外注」依頼テンプレ3点セット＋クラウドソーシング選定チェックリスト",
+};
+
+// タイプ別カラー（ライトモード）
+const TYPE_COLORS={
+  overloaded:   {accent:"#2d6a4f",light:"#e4f3eb",border:"#a8d4b8",text:"#1a4030",bar:"#2d6a4f"},
+  marketing:    {accent:"#2d508a",light:"#e4ecf8",border:"#a8bcd8",text:"#1a3060",bar:"#2d508a"},
+  inquiry_loss: {accent:"#8a5020",light:"#f8efe4",border:"#d4b090",text:"#5a3010",bar:"#8a5020"},
+  ai_lost:      {accent:"#5040a0",light:"#eeecf8",border:"#b0a8d8",text:"#302060",bar:"#5040a0"},
+  artisan:      {accent:"#8a2828",light:"#f8e8e8",border:"#d4a8a8",text:"#5a1818",bar:"#8a2828"},
+  almost_ready: {accent:"#286828",light:"#e8f8e8",border:"#a8d4a8",text:"#184018",bar:"#286828"},
+  outsource_bad:{accent:"#882080",light:"#f8e8f8",border:"#d0a0cc",text:"#501050",bar:"#882080"},
+};
+
+const AFF_DATA={
+  overloaded:[
+    {label:"マネーフォワード クラウド会計Plus",url:"https://passport.partnersuccess.app/referral/?id=0959ae09-b5dd-440a-9c9e-0fc2f55ee4ee"},
+    {label:"マネーフォワード クラウドインボイス（請求書送付）",url:"https://passport.partnersuccess.app/referral/?id=3bb42d60-1f7a-414e-a0db-b1811ad02d11"},
+    {label:"マネーフォワード クラウド債権管理",url:"https://passport.partnersuccess.app/referral/?id=0508f6cf-675a-4f7a-ab99-97f6580f5422"},
+    {label:"Genspark Plus（AI業務効率化）",url:"https://passport.partnersuccess.app/referral/?id=1a97ab67-2486-40d5-bb5d-ce44a1ee97c2"},
+  ],
+  marketing:[
+    {label:"口コミ365（Googleマップ・MEO口コミ管理）",url:"https://passport.partnersuccess.app/referral/?id=af111c8d-e607-4e24-b31e-d063d7ddea2c"},
+    {label:"ファネルAi（AIマーケティング自動化）",url:"https://passport.partnersuccess.app/referral/?id=ef13c976-4e1f-46dc-837d-2e80fa863fe0"},
+    {label:"アプリメンバーズ（顧客アプリ・リピーター獲得）",url:"https://passport.partnersuccess.app/referral/?id=fc171395-b234-4e31-8047-b85fc67d68f5"},
+  ],
+  inquiry_loss:[
+    {label:"アプリメンバーズ（顧客管理・フォローアップ）",url:"https://passport.partnersuccess.app/referral/?id=fc171395-b234-4e31-8047-b85fc67d68f5"},
+    {label:"ファネルAi（問い合わせ対応の自動化）",url:"https://passport.partnersuccess.app/referral/?id=ef13c976-4e1f-46dc-837d-2e80fa863fe0"},
+    {label:"マネーフォワード クラウドインボイス（請求・決済管理）",url:"https://passport.partnersuccess.app/referral/?id=3bb42d60-1f7a-414e-a0db-b1811ad02d11"},
+  ],
+  ai_lost:[
+    {label:"Genspark Plus（AI業務効率化・1年版/3年版）",url:"https://passport.partnersuccess.app/referral/?id=1a97ab67-2486-40d5-bb5d-ce44a1ee97c2"},
+    {label:"ファネルAi（AIマーケティングツール）",url:"https://passport.partnersuccess.app/referral/?id=ef13c976-4e1f-46dc-837d-2e80fa863fe0"},
+    {label:"DX職（デジショク）—DX人材・支援サービス",url:"https://passport.partnersuccess.app/referral/?id=b8fb184a-e218-403a-960f-1b4f76551204"},
+  ],
+  artisan:[
+    {label:"マネーフォワード クラウド会計Plus",url:"https://passport.partnersuccess.app/referral/?id=0959ae09-b5dd-440a-9c9e-0fc2f55ee4ee"},
+    {label:"マネーフォワード クラウドインボイス（請求書送付）",url:"https://passport.partnersuccess.app/referral/?id=3bb42d60-1f7a-414e-a0db-b1811ad02d11"},
+    {label:"マネーフォワード クラウド債権管理",url:"https://passport.partnersuccess.app/referral/?id=0508f6cf-675a-4f7a-ab99-97f6580f5422"},
+  ],
+  almost_ready:[
+    {label:"Genspark Plus（AI自動化・業務効率化）",url:"https://passport.partnersuccess.app/referral/?id=1a97ab67-2486-40d5-bb5d-ce44a1ee97c2"},
+    {label:"ファネルAi（業務フロー自動化）",url:"https://passport.partnersuccess.app/referral/?id=ef13c976-4e1f-46dc-837d-2e80fa863fe0"},
+    {label:"DX職（デジショク）—DX推進支援",url:"https://passport.partnersuccess.app/referral/?id=b8fb184a-e218-403a-960f-1b4f76551204"},
+  ],
+  outsource_bad:[
+    {label:"DX職（デジショク）—外注・DX人材活用",url:"https://passport.partnersuccess.app/referral/?id=b8fb184a-e218-403a-960f-1b4f76551204"},
+    {label:"アプリメンバーズ（業務・顧客管理の仕組み化）",url:"https://passport.partnersuccess.app/referral/?id=fc171395-b234-4e31-8047-b85fc67d68f5"},
+    {label:"Genspark Plus（指示書・マニュアル作成AI）",url:"https://passport.partnersuccess.app/referral/?id=1a97ab67-2486-40d5-bb5d-ce44a1ee97c2"},
+  ],
+};
+
+const QUESTIONS=[
+  {axis:"billing",text:"請求書や入金確認は、どのように管理していますか？",
+   opts:[{t:"あまり管理できていない",s:0},{t:"毎回手作業で作成・確認している",s:1},{t:"会計ソフトや請求書ツールを使っている",s:2},{t:"スタッフや外注に任せている",s:3}]},
+  {axis:"web",text:"ホームページやGoogleビジネスプロフィールは、更新できていますか？",
+   opts:[{t:"ほとんど更新していない／何をすればいいかわからない",s:0},{t:"半年〜1年に1回程度",s:1},{t:"月1回程度は更新している",s:2},{t:"週1回以上、定期的に更新している",s:3}]},
+  {axis:"sns",text:"SNSやブログの投稿は続いていますか？",
+   opts:[{t:"ほとんど止まっている",s:0},{t:"思いついたときだけ投稿している",s:1},{t:"月数回は投稿できている",s:2},{t:"週複数回、継続できている",s:3}]},
+  {axis:"inquiry",text:"問い合わせへの返信は、どの状態に近いですか？",
+   opts:[{t:"返信漏れや遅れが起きている",s:0},{t:"社長が毎回その場で対応している",s:1},{t:"返信テンプレがある",s:2},{t:"スタッフや外注に任せている",s:3}]},
+  {axis:"ai",text:"AIツールを仕事に使っていますか？",
+   opts:[{t:"まだほとんど使っていない",s:0},{t:"ChatGPTなどを少し触ったことがある",s:1},{t:"投稿やメール作成に定期的に使っている",s:2},{t:"業務フローの一部に組み込んでいる",s:3}]},
+  {axis:"outsource",text:"外注・代行サービスは使っていますか？",
+   opts:[{t:"何を頼めばいいかわからず、使っていない",s:0},{t:"使いたいが、指示が面倒で自分でやっている",s:1},{t:"一部だけ外注・代行を使っている",s:2},{t:"ある程度、分業できている",s:3}]},
+  {axis:"billing",text:"顧客情報や案件の進捗は、どこで管理していますか？",
+   opts:[{t:"頭の中・手帳・LINEなど属人的な管理",s:0},{t:"ExcelやGoogleスプレッドシートで管理",s:1},{t:"クラウドツールで管理している",s:2},{t:"CRMや専用ツールで体系的に管理している",s:3}]},
+  {axis:"web",text:"集客（HP・MEO・SNS）に、月どのくらい時間を使えていますか？",
+   opts:[{t:"ほとんど時間を取れていない",s:0},{t:"月1〜2時間程度",s:1},{t:"月5〜10時間程度",s:2},{t:"週次で計画的に動いている",s:3}]},
+  {axis:"sns",text:"投稿のネタや素材（写真・テキスト）は確保できていますか？",
+   opts:[{t:"ネタが全くない、考えること自体が止まっている",s:0},{t:"ネタはあるが、投稿まで落とし込めていない",s:1},{t:"ある程度ネタを準備できている",s:2},{t:"ストックがあり、計画的に投稿できている",s:3}]},
+  {axis:"inquiry",text:"見込み客や既存顧客へのフォローは、できていますか？",
+   opts:[{t:"ほとんどできていない",s:0},{t:"気が向いたときにLINEやメールを送る程度",s:1},{t:"定期的に連絡は取れている",s:2},{t:"仕組みやリストで管理・フォローできている",s:3}]},
+  {axis:"ai",text:"今の会社全体の仕組み化・自動化の状態は？",
+   opts:[{t:"ほぼ何も仕組み化されていない",s:0},{t:"一部ツールは使っているが、バラバラな状態",s:1},{t:"いくつかの業務は自動化・仕組み化できている",s:2},{t:"業務の大部分がツールや外注で回っている",s:3}]},
+  {axis:"outsource",text:"外注・代行先への依頼の出し方は？",
+   opts:[{t:"指示の出し方がわからず、結局自分でやってしまう",s:0},{t:"毎回口頭や感覚で伝えている",s:1},{t:"テンプレやチェックリストがある",s:2},{t:"マニュアルや業務フローが整備されている",s:3}]},
+];
+
+const TYPES={
+  overloaded:{name:"全部抱え込み社長",subtitle:"会社は社長の時間と判断力で動いています",desc:"会社は回っています。ただし、その多くを社長自身の時間と判断力で支えている状態です。一つひとつは小さな作業でも、積み重なると本来使うべき時間が削られています。",has:["現場への深い理解","顧客との信頼関係","判断の速さ"],missing:["請求・問い合わせの仕組み化","投稿・集客の自動化","外注に渡すための業務分解"],ai:["メール返信の下書き作成","SNS投稿案の生成","よくある質問への回答文作成"],out:["記帳・経理代行","MEO・HP更新","投稿代行"],actions:["よくある問い合わせ返信をテンプレ化する","請求書・入金確認をツール化する","投稿文作成をAIに下書きさせる"],cats:["請求書ツール","会計ソフト","AIライティングツール","オンライン秘書","記帳代行"]},
+  marketing:{name:"集客あと回し社長",subtitle:"実力はあるのに、ネット上での存在が薄くなっています",desc:"本業への集中力と専門性は十分です。ただ、HP・MEO・SNSへの手が回っておらず、ネット上での認知が薄れています。良い仕事をしていても、入口が弱いと機会損失が生まれます。",has:["本業の専門性","既存顧客への対応力","仕事の質の高さ"],missing:["HPの定期更新","Googleビジネスプロフィールの最適化","SNS投稿の継続"],ai:["HPのお知らせ・事例文の作成","SNS投稿文の下書き","Google口コミへの返信文"],out:["HP制作・更新代行","MEO運用代行","SNS投稿代行"],actions:["Googleビジネスプロフィールを今週中に更新する","月1本の事例・お知らせ記事を習慣化する","SNS投稿をAI下書き→確認→投稿の流れにする"],cats:["HP制作サービス","MEO対策ツール","SNS投稿代行","口コミ管理"]},
+  inquiry_loss:{name:"問い合わせ取りこぼし社長",subtitle:"売上になる前の相談が、静かに流れている可能性があります",desc:"本業への対応は誠実です。ただ、問い合わせへの返信が遅れたり、見込み客へのフォローが止まっていることで、気づかないうちに機会を逃しています。",has:["本業への誠実さ","顧客との関係構築力","対応の丁寧さ"],missing:["問い合わせ返信のテンプレ","見込み客リストの管理","フォローアップの仕組み"],ai:["問い合わせ返信のテンプレ作成","顧客へのフォローメール文の作成","よくある質問と回答集の整備"],out:["問い合わせ対応代行","CRM設定サポート","メール配信設定"],actions:["よくある問い合わせ3〜5種の返信テンプレを作る","見込み客のリストをスプレッドシートで管理し始める","LINE公式またはメール配信ツールを導入する"],cats:["CRM・顧客管理ツール","問い合わせフォーム作成","LINE公式アカウント支援","メール配信ツール"]},
+  ai_lost:{name:"AI迷子社長",subtitle:"AIを使う前に、まず減らしたい仕事を決める段階です",desc:"AIへの興味・関心は持っています。ただ、何に使えばいいかがまだ定まっていない状態です。最初の一歩は「全業務のAI化」ではなく「一番時間を取られている仕事を1つ楽にする」ことです。",has:["変化への柔軟性","改善意欲","本業への集中"],missing:["AI活用の具体的な切り口","自社に合ったツール選定","AIを使う業務の優先順位"],ai:["投稿文・メール返信の下書き","議事録・打ち合わせメモの整理","FAQ・マニュアル文の作成"],out:["AI導入の初期設定サポート","業務フロー整理の相談"],actions:["まず「投稿文の下書き」だけにAIを使ってみる","ChatGPTまたはClaudeで1週間、毎日1回使う習慣を作る","AI活用したい業務を3つリストアップする"],cats:["AIライティングツール","議事録AI","ChatGPT活用講座","AI導入相談"]},
+  artisan:{name:"紙と記憶で回す職人社長",subtitle:"社長の記憶力と経験値で会社が動いています",desc:"本業の技術・経験は本物です。ただ、請求・顧客管理・案件進捗が社長の頭の中にある状態は、万が一のときのリスクになります。まず「見える化」から始めると、次の展開が楽になります。",has:["本業の高い専門性","顧客からの信頼","現場力"],missing:["請求・会計の仕組み","顧客・案件管理のデジタル化","業務の引き継ぎ・マニュアル化"],ai:["業務マニュアルの文章化","顧客への定期連絡文の作成","見積書・提案書の下書き"],out:["記帳代行","請求書管理の外注","クラウドツール導入サポート"],actions:["顧客リストをスプレッドシートに書き出す（名前だけでいい）","請求書ツールまたは会計ソフトを1つ導入する","業務の流れをノートに書き出してみる"],cats:["会計ソフト","請求書ツール","Google Workspace","タスク管理ツール","記帳代行"]},
+  almost_ready:{name:"仕組み化直前社長",subtitle:"部品は揃っています。あとはつなぐだけです",desc:"各業務にツールや外注を取り入れ、ある程度形になってきています。ただ、それぞれがバラバラで連携していないために、まだ社長の手間が残っています。あと一歩の整理で、大きく楽になれます。",has:["ツール活用の基礎","外注・代行の経験","業務改善への意識"],missing:["ツール間の連携・自動化","情報の一元管理","社長の承認・確認作業の削減"],ai:["複数ツールをつなぐ業務フロー設計","テンプレ・マニュアルの精度向上","定期レポートの自動生成"],out:["GAS・Zapier等の自動化構築","業務フロー全体の見直し相談"],actions:["使っているツールを一覧にして連携できるものを探す","社長が毎回やっているルーティン作業を書き出す","GASまたはMake/Zapierで1つだけ自動化してみる"],cats:["GAS構築代行","Make / Zapier","Google Workspace改善","業務自動化相談"]},
+  outsource_bad:{name:"外注下手社長",subtitle:"渡す相手がいないのではなく、渡し方が決まっていない状態です",desc:"外注や代行に興味はあるが、指示を作るのが面倒で結局自分でやってしまう。その繰り返しが、社長の時間を奪い続けています。外注の失敗のほとんどは「指示の不明確さ」にあります。",has:["業務への精通度","品質へのこだわり","改善への意欲"],missing:["外注依頼のテンプレ","業務マニュアル・チェックリスト","外注先の選定基準"],ai:["依頼文・指示書のテンプレ作成","業務マニュアルの文章化","チェックリストの整備"],out:["クラウドソーシングでのスポット外注","オンライン秘書への段階的移行"],actions:["1つの業務の「依頼テンプレ」をA4 1枚で作る","まず月5,000円以下でスポット外注を1件試す","業務の手順を箇条書きで書き出してみる"],cats:["クラウドソーシング","オンライン秘書","マニュアル作成代行","SNS運用代行"]},
+};
+
+// ====================================================
+// 状態
+// ====================================================
+let currentQ=0,answers=[],selected=null;
+
+// ====================================================
+// スコア計算
+// ====================================================
+function calcScores(ans){
+  const s={billing:0,web:0,sns:0,inquiry:0,ai:0,outsource:0};
+  ans.forEach(a=>s[a.axis]+=a.score);
+  const p={};
+  AXES.forEach(ax=>{p[ax.key]=Math.round((s[ax.key]/6)*100);});
+  return p;
+}
+function determineType(p){
+  const avg=Math.round(Object.values(p).reduce((a,b)=>a+b,0)/6);
+  const sorted=Object.entries(p).sort((a,b)=>a[1]-b[1]);
+  const w1=sorted[0][0],w2=sorted[1][0];
+  if(avg<33) return"overloaded";
+  if((w1==="web"||w1==="sns")&&(w2==="web"||w2==="sns")) return"marketing";
+  if(w1==="inquiry"&&p.inquiry<40) return"inquiry_loss";
+  if(w1==="ai"&&p.ai<40) return"ai_lost";
+  const bo=(w1==="billing"||w1==="outsource")&&(w2==="billing"||w2==="outsource");
+  if(bo&&avg<55) return"artisan";
+  if(w1==="outsource"&&p.outsource<40) return"outsource_bad";
+  return"almost_ready";
+}
+
+// ====================================================
+// タイルカラー（ライトモード）
+// ====================================================
+function tileColor(pct){
+  if(pct<35) return{bg:"#fff5f2",border:"#e8b0a0",leftBar:"#c85c3a",num:"#c85c3a",bar:"#c85c3a"};
+  if(pct<60) return{bg:"#fffbf0",border:"#e8d098",leftBar:"#c8992a",num:"#c8992a",bar:"#c8992a"};
+  return     {bg:"#f2fbf5",border:"#a8d8b8",leftBar:"#2d6a4f",num:"#2d6a4f",bar:"#2d6a4f"};
+}
+
+// ====================================================
+// レーダーチャート（ライトモード）
+// ====================================================
+function buildRadarSVG(scores,accentColor){
+  const S=268,cx=134,cy=134,maxR=84,labelR=110;
+  const keys=["billing","web","sns","inquiry","ai","outsource"];
+  const shortLabels=["請求・会計","HP・集客","SNS","問合せ","AI","外注"];
+  const n=keys.length;
+  function angle(i){return(i/n)*Math.PI*2-Math.PI/2;}
+  function pt(r,i){return[cx+r*Math.cos(angle(i)),cy+r*Math.sin(angle(i))];}
+
+  let grid="";
+  [1,2,3].forEach(lv=>{
+    const r=maxR*lv/3;
+    const pts=keys.map((_,i)=>pt(r,i).map(v=>v.toFixed(1)).join(",")).join(" ");
+    const op=lv===3?.18:.08;
+    grid+=`<polygon points="${pts}" fill="none" stroke="rgba(0,0,0,${op})" stroke-width="${lv===3?1:.7}"/>`;
+  });
+
+  let axes="";
+  keys.forEach((_,i)=>{
+    const[x2,y2]=pt(maxR,i);
+    axes+=`<line x1="${cx}" y1="${cy}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(0,0,0,.07)" stroke-width="1"/>`;
+  });
+
+  const targetPts=keys.map((key,i)=>{const r=maxR*scores[key]/100;return pt(r,i);});
+  const centerPts=keys.map(()=>`${cx},${cy}`).join(" ");
+
+  let dots="";
+  keys.forEach((_,i)=>{
+    dots+=`<circle class="radar-dot" cx="${cx}" cy="${cy}" r="4" fill="${accentColor}" stroke="#fff" stroke-width="2"/>`;
+  });
+
+  let labels="";
+  keys.forEach((_,i)=>{
+    const a=angle(i);
+    const[lx,ly]=pt(labelR,i);
+    const anchor=Math.cos(a)>0.2?"start":Math.cos(a)<-0.2?"end":"middle";
+    const dy=Math.sin(a)>0.2?4:Math.sin(a)<-0.2?-4:0;
+    labels+=`<text x="${lx.toFixed(1)}" y="${(ly+dy).toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" fill="#888" font-size="10" font-family="Hiragino Sans,YuGothic,sans-serif">${shortLabels[i]}</text>`;
+  });
+
+  return{
+    svg:`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" style="display:block;">
+      ${grid}${axes}
+      <polygon id="radar-polygon" points="${centerPts}" fill="${accentColor}" fill-opacity="0.15" stroke="${accentColor}" stroke-width="2.5" stroke-linejoin="round"/>
+      ${dots}${labels}
+    </svg>`,
+    targetPts,cx,cy,
+  };
+}
+
+// ====================================================
+// アニメーション
+// ====================================================
+function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
+function animVal(setter,target,duration,delay=0){
+  setTimeout(()=>{
+    let st=null;
+    function step(ts){
+      if(!st)st=ts;
+      const p=Math.min((ts-st)/duration,1);
+      setter(Math.round(ease(p)*target));
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  },delay);
+}
+function animRadar(rd,duration){
+  const{targetPts,cx,cy}=rd;
+  const poly=document.getElementById("radar-polygon");
+  const dots=[...document.querySelectorAll(".radar-dot")];
+  let st=null;
+  function step(ts){
+    if(!st)st=ts;
+    const p=Math.min((ts-st)/duration,1),e=ease(p);
+    poly.setAttribute("points",targetPts.map(([tx,ty])=>
+      `${(cx+(tx-cx)*e).toFixed(2)},${(cy+(ty-cy)*e).toFixed(2)}`).join(" "));
+    dots.forEach((d,i)=>{
+      const[tx,ty]=targetPts[i];
+      d.setAttribute("cx",(cx+(tx-cx)*e).toFixed(2));
+      d.setAttribute("cy",(cy+(ty-cy)*e).toFixed(2));
+    });
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ====================================================
+// 画面切り替え
+// ====================================================
+function showSection(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+
+// ====================================================
+// Landing
+// ====================================================
+function initLanding(){
+  // ---- 症状チェックリスト ----
+  const SYMPTOMS=[
+    "請求・入金確認に毎回1時間以上かかっている",
+    "HPを最後に更新した日を思い出せない",
+    "AIを使おうと思っているが、何から始めるか決まっていない",
+    "外注したいが、何を頼めばいいか言語化できていない",
+    "毎日同じ細かい作業を繰り返している",
+  ];
+  const sl=document.getElementById("symptom-list");
+  if(sl){
+    sl.innerHTML=SYMPTOMS.map((s,i)=>`
+      <div class="symptom-row" style="${i===SYMPTOMS.length-1?'border-bottom:none;':''}">
+        <div class="symptom-row-icon">
+          <svg viewBox="0 0 10 8" width="10" height="8" fill="none">
+            <path d="M1 4L3.8 7L9 1" stroke="#c85c3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="symptom-row-text">${s}</span>
+      </div>`).join('');
+  }
+
+  // ---- 6軸グリッド ----
+  const ag=document.getElementById("axes-grid");
+  if(ag){
+    const AXIS_DESC={
+      billing:"請求・入金・会計ソフト管理",
+      web:"HP・Googleマップ・集客施策",
+      sns:"SNS・ブログの投稿継続",
+      inquiry:"問い合わせ・顧客フォロー",
+      ai:"AIツール・業務自動化",
+      outsource:"外注・代行・分業の仕組み",
+    };
+    ag.innerHTML=AXES.map((a,i)=>`
+      <div class="axis-tile">
+        <span class="axis-tile-num">${String(i+1).padStart(2,'0')}</span>
+        <div>
+          <div class="axis-tile-label">${a.label}</div>
+          <div class="axis-tile-desc">${AXIS_DESC[a.key]}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ---- 7タイプバッジ ----
+  const tb=document.getElementById("type-badges");
+  if(tb){
+    const TYPE_NAMES={
+      overloaded:"全部やり社長",marketing:"集客あと回し社長",
+      inquiry_loss:"問い合わせロス社長",ai_lost:"AI迷子社長",
+      artisan:"職人肌社長",almost_ready:"あと一歩社長",
+      outsource_bad:"丸投げ苦手社長",
+    };
+    tb.innerHTML=Object.entries(TYPE_COLORS).map(([k,c])=>`
+      <span class="type-badge" style="color:${c.text};background:${c.light};border-color:${c.border};">
+        ${TYPE_NAMES[k]}
+      </span>`).join('');
+  }
+
+  // legacy
+  const tl=document.getElementById("target-list");
+  if(tl){ tl.innerHTML=""; }
+}
+
+// ====================================================
+// Quiz
+// ====================================================
+function startQuiz(){
+  currentQ=0;answers=[];selected=null;
+  renderQuestion();
+  showSection("sec-quiz");
+}
+
+function renderDots(){
+  const wrap=document.getElementById("q-dots");
+  wrap.innerHTML="";
+  for(let i=0;i<QUESTIONS.length;i++){
+    const d=document.createElement("div");
+    const done=i<currentQ;
+    const active=i===currentQ;
+    d.style.cssText=`width:${active?16:6}px;height:6px;border-radius:3px;transition:width .3s,background .3s;flex-shrink:0;background:${active?"#2d6a4f":done?"#a8d4b8":"#ddd"};`;
+    wrap.appendChild(d);
+  }
+}
+
+function renderQuestion(){
+  const q=QUESTIONS[currentQ];
+  const prog=Math.round((currentQ/QUESTIONS.length)*100);
+  document.getElementById("progress-bar").style.width=prog+"%";
+  document.getElementById("q-num").textContent=currentQ+1;
+  document.getElementById("q-total").textContent=" / "+QUESTIONS.length;
+  document.getElementById("q-pct-label").textContent=prog+"%";
+  document.getElementById("q-axis-tag").textContent=AXIS_TAG[q.axis];
+  document.getElementById("q-text").textContent=q.text;
+  const isLast=(currentQ===QUESTIONS.length-1);
+  const btn=document.getElementById("btn-next");
+  btn.textContent=isLast?"診断結果を見る →":"次の質問 →";
+  btn.disabled=true;
+  selected=null;
+  renderDots();
+
+  const opts=document.getElementById("q-options");
+  opts.innerHTML="";
+  q.opts.forEach((opt,i)=>{
+    const b=document.createElement("button");
+    b.className="opt-card";
+    b.textContent=opt.t;
+    b.onclick=()=>{
+      document.querySelectorAll(".opt-card").forEach(x=>x.classList.remove("selected"));
+      b.classList.add("selected");
+      selected=i;
+      document.getElementById("btn-next").disabled=false;
+    };
+    opts.appendChild(b);
+  });
+}
+
+function nextQuestion(){
+  if(selected===null)return;
+  const q=QUESTIONS[currentQ];
+  answers.push({axis:q.axis,score:q.opts[selected].s});
+  if(currentQ+1>=QUESTIONS.length){showResult();return;}
+  const content=document.getElementById("q-content");
+  content.style.cssText="animation:qLeave .2s ease forwards;";
+  setTimeout(()=>{
+    currentQ++;
+    renderQuestion();
+    content.style.cssText="animation:qEnter .28s ease both;";
+    setTimeout(()=>{content.style.cssText="";},280);
+  },200);
+}
+
+// ====================================================
+// Result
+// ====================================================
+function showResult(demoScores){
+  const scores=demoScores||calcScores(answers);
+  const typeKey=determineType(scores);
+  const type=TYPES[typeKey];
+  const colors=TYPE_COLORS[typeKey];
+  const avg=Math.round(Object.values(scores).reduce((a,b)=>a+b,0)/6);
+  const sortedAxes=Object.entries(scores).sort((a,b)=>a[1]-b[1]);
+  const[worstKey,worstPct]=sortedAxes[0];
+
+  // ヒーローカード カラーバー
+  document.getElementById("hero-bar").style.background=colors.accent;
+  // バッジ
+  const badge=document.getElementById("hero-badge");
+  badge.style.cssText=`font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:.04em;font-weight:500;background:${colors.light};color:${colors.text};border:1px solid ${colors.border};`;
+  badge.textContent=typeKey==="overloaded"?"全部抱え込み":typeKey==="marketing"?"集客課題":typeKey==="inquiry_loss"?"問合せ課題":typeKey==="ai_lost"?"AI未活用":typeKey==="artisan"?"アナログ型":typeKey==="almost_ready"?"仕組み化直前":"外注課題";
+  // ルール線
+  document.getElementById("hero-rule").style.background=colors.accent;
+  // スタットボックス
+  document.getElementById("stat-total").style.borderColor=colors.border;
+  document.getElementById("stat-worst").style.borderColor=colors.border;
+  // 最弱スコア色
+  const wp=tileColor(worstPct);
+  document.getElementById("r-worst-pct").style.color=wp.num;
+
+  // テキスト
+  document.getElementById("r-name").textContent="「"+type.name+"」";
+  document.getElementById("r-name").style.color=colors.text;
+  document.getElementById("r-subtitle").textContent=type.subtitle;
+  document.getElementById("r-desc").textContent=type.desc;
+  document.getElementById("r-worst-label").textContent=AXIS_SHORT[worstKey];
+  document.getElementById("r-worst-pct").textContent=worstPct+"%";
+
+  // 危機感セクション
+  const risk=RISK[typeKey];
+  document.getElementById("r-risk-title").textContent=risk.title;
+  document.getElementById("r-risk-body").textContent=risk.body;
+
+  // チェックリスト説明
+  document.getElementById("r-checklist-desc").textContent=CHECKLIST_DESC[typeKey];
+
+  // レーダー
+  const rd=buildRadarSVG(scores,colors.accent);
+  document.getElementById("radar-container").innerHTML=rd.svg;
+
+  // スコアタイル
+  const tileWrap=document.getElementById("score-tiles");
+  tileWrap.innerHTML="";
+  AXES.forEach((ax,i)=>{
+    const pct=scores[ax.key];
+    const tc=tileColor(pct);
+    const div=document.createElement("div");
+    div.className="score-tile";
+    div.style.cssText=`background:${tc.bg};border-color:${tc.border};animation-delay:${0.06+i*0.07}s;`;
+    div.innerHTML=`
+      <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${tc.leftBar};border-radius:10px 0 0 10px;"></div>
+      <div class="tile-label" style="padding-left:8px;">${ax.label}</div>
+      <div class="tile-pct" style="color:${tc.num};padding-left:8px;">0%</div>
+      <div class="tile-bar-wrap" style="margin-left:8px;margin-right:4px;">
+        <div class="tile-bar" id="tbar-${ax.key}" style="background:${tc.bar};"></div>
+      </div>`;
+    tileWrap.appendChild(div);
+  });
+
+  // できていること / 課題
+  document.getElementById("r-has").innerHTML=type.has.map(t=>
+    `<div style="display:flex;gap:8px;margin-bottom:7px;align-items:flex-start;"><span style="color:#2d6a4f;font-size:13px;line-height:1.5;flex-shrink:0;">✓</span><span style="font-size:12px;line-height:1.75;color:#444;">${t}</span></div>`
+  ).join("");
+  document.getElementById("r-missing").innerHTML=type.missing.map(t=>
+    `<div style="display:flex;gap:8px;margin-bottom:7px;align-items:flex-start;"><span style="color:#c85c3a;font-size:13px;line-height:1.5;flex-shrink:0;">−</span><span style="font-size:12px;line-height:1.75;color:#444;">${t}</span></div>`
+  ).join("");
+
+  // AI / 外注
+  document.getElementById("r-ai").innerHTML=type.ai.map(t=>
+    `<div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;"><span class="badge-ai">AI</span><span style="font-size:12px;line-height:1.75;color:#555;">${t}</span></div>`
+  ).join("");
+  document.getElementById("r-out").innerHTML=type.out.map(t=>
+    `<div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;"><span class="badge-out">外注</span><span style="font-size:12px;line-height:1.75;color:#555;">${t}</span></div>`
+  ).join("");
+
+  // アクション
+  document.getElementById("r-actions").innerHTML=type.actions.map((t,i)=>
+    `<div style="display:flex;gap:18px;margin-bottom:16px;align-items:flex-start;padding-bottom:16px;border-bottom:1px solid #f4f0e8;">
+      <span class="serif" style="font-size:24px;font-weight:500;color:${colors.accent};min-width:24px;line-height:1.2;flex-shrink:0;">${i+1}</span>
+      <span style="font-size:13px;line-height:1.9;color:#444;padding-top:1px;">${t}</span>
+    </div>`
+  ).join("").replace(/border-bottom[^;]+;\s*<\/div>\s*$/,"</div>");
+
+  // カテゴリ
+  document.getElementById("r-cats").innerHTML=type.cats.map(c=>`<span class="tag-pill">${c}</span>`).join("");
+
+  // アフィリ
+  document.getElementById("r-affiliate").innerHTML=(AFF_DATA[typeKey]||[]).map(item=>
+    `<a href="${item.url}" class="aff-link">${item.label}</a>`
+  ).join("");
+
+  // Xシェア
+  const shareText=`社長の時間ロス診断をやった。\n\n結果：「${type.name}」\n\n${AXIS_SHORT[worstKey]}スコア ${worstPct}%。\n${JIGYOKU[typeKey]}\n\n社長が全部やる会社から、\n仕組みで回る会社へ。\n\n#小さな会社のAI係`;
+  document.getElementById("r-share-preview").textContent=shareText;
+  document.getElementById("r-share-preview").style.borderLeftColor=colors.accent;
+  document.getElementById("r-share-link").href=
+    "https://twitter.com/intent/tweet?text="+encodeURIComponent(shareText)
+    +"&url="+encodeURIComponent("https://shacho-shindan.pages.dev");
+
+  showSection("sec-result");
+
+  // アニメーション
+  setTimeout(()=>{
+    animVal(v=>{document.getElementById("r-avg-hero").textContent=v;},avg,950);
+    animRadar(rd,950);
+    AXES.forEach((ax,i)=>{
+      const pct=scores[ax.key];
+      const tilePctEl=tileWrap.children[i]?.querySelector(".tile-pct");
+      if(tilePctEl) animVal(v=>{tilePctEl.textContent=v+"%";},pct,700,100+i*65);
+      const bar=document.getElementById("tbar-"+ax.key);
+      if(bar) animVal(v=>{bar.style.width=v+"%";},pct,700,120+i*65);
+    });
+  },80);
+}
+
+// ====================================================
+// デモ
+// ====================================================
+function showDemo(){
+  showResult({billing:67,web:17,sns:17,inquiry:67,ai:50,outsource:50});
+}
+
+// ====================================================
+// メール
+// ====================================================
+function submitEmail(){
+  const inp=document.getElementById("email-input");
+  if(!inp.value.trim()){inp.focus();return;}
+  document.getElementById("email-thanks").style.display="block";
+  inp.disabled=true;
+  inp.nextElementSibling.disabled=true;
+}
+
+// ====================================================
+// リセット
+// ====================================================
+function resetAll(){
+  currentQ=0;answers=[];selected=null;
+  const ei=document.getElementById("email-input");
+  ei.value="";ei.disabled=false;
+  document.getElementById("email-thanks").style.display="none";
+  showSection("sec-landing");
+}
+
+// ====================================================
+// 初期化
+// ====================================================
+initLanding();
+</script>
+</body>
+</html>
